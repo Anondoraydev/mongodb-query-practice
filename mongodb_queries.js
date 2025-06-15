@@ -70,3 +70,26 @@ db.test.find({ company: { $type: "null" } }).project({ company: 1 })
 
 // যেসব ইউজারের ইন্টারেস্ট "Cooking", তাদের ইন্টারেস্ট দেখাবে
 db.test.find({ interests: "Cooking" }).project({ interests: 1 })
+
+// যেসব ডকুমেন্টের interests array-র ৩য় (index 2) আইটেমটি "Cooking", শুধু সেই ডেটাগুলো দেখাবে
+db.test.find({ "interests.2": "Cooking" }).project({ interests: 1 })
+
+// যেসব ইউজারের interests array-তে "Cooking", "Writing" এবং "Reading" — এই তিনটি আইটেমই আছে, তাদের দেখাবে
+db.test.find({
+    interests: { $all: ["Cooking", "Writing", "Reading"] }
+}).project({ interests: 1 })
+
+// যেসব ইউজারের skills array-এর মধ্যে কোনো একটি object-এর name ফিল্ড "JAVASCRIPT", শুধু সেই ডেটাগুলো দেখাবে
+db.test.find({
+    "skills.name": "JAVASCRIPT"
+}).project({ skills: 1 })
+
+// যেসব ইউজারের skills array-র মধ্যে কোনো একটি object আছে যেটার name "JAVASCRIPT" এবং level "Intermidiate", তাদের দেখাবে
+db.test.find({
+    skills: {
+        $elemMatch: {
+            name: "JAVASCRIPT",
+            level: "Intermidiate"
+        }
+    }
+}).project({ skills: 1 })
