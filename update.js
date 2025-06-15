@@ -29,3 +29,26 @@ db.test.updateOne(
         }
     }
 )
+
+// _id অনুযায়ী নির্দিষ্ট ডকুমেন্টে "comet" ভ্যালুটি interests অ্যারেতে যোগ করব,
+// তবে আগেই থাকলে আর যোগ হবে না
+db.test.updateOne(
+    { _id: ObjectId("6406ad63fc13ae5a40000065") },
+    {
+        $addToSet: {
+            interests: "comet"
+        }
+    }
+)
+
+
+// _id অনুযায়ী নির্দিষ্ট ডকুমেন্টে "comet" ভ্যালুটি interests অ্যারেতে যোগ করব,
+// আগেই থাকলেও আবারও যোগ হবে
+db.test.updateOne(
+    { _id: ObjectId("6406ad63fc13ae5a40000065") },
+    {
+        $push: {
+            interests: "comet"
+        }
+    }
+)
