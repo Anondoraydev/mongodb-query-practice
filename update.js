@@ -52,3 +52,43 @@ db.test.updateOne(
         }
     }
 )
+
+// নির্দিষ্ট ডকুমেন্টে "address.city" ফিল্ডে "Dhaka" সেট করা হচ্ছে
+db.test.updateOne(
+    { _id: ObjectId("6406ad63fc13ae5a40000065") },
+    {
+        $set: { "address.city": "Dhaka" }
+    }
+)
+
+// নির্দিষ্ট ডকুমেন্টে "address.city" এবং "address.country" ফিল্ডে মান সেট করা হচ্ছে
+db.test.updateOne(
+    { _id: ObjectId("6406ad63fc13ae5a40000065") },
+    {
+        $set: {
+            "address.city": "Dhaka",
+            "address.country": "Bangladesh"
+        }
+    }
+)
+
+// education অ্যারেতে যার major "Communications", সেটার মান পরিবর্তন করে "CSE" করা হচ্ছে
+db.test.updateOne(
+    { _id: ObjectId("6406ad63fc13ae5a40000065"), "education.major": "Communications" },
+    {
+        $set: {
+            "education.$.major": "CSE"
+        }
+    }
+)
+
+// নির্দিষ্ট ডকুমেন্টে "age" ফিল্ডের মান ১ বাড়ানো হচ্ছে
+db.test.updateOne(
+    { _id: ObjectId("6406ad63fc13ae5a40000065") },
+    {
+        $inc: {
+            age: 1
+        }
+    }
+)
+
