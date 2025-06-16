@@ -35,3 +35,17 @@ db.test.aggregate([
     { $out: "course-student" }
 ])
 
+// ✅ $merge সহ MongoDB Aggregation Pipeline(বাংলা কমেন্টসহ)
+db.test.aggregate([
+    // স্টেজ-১: (ঐচ্ছিকভাবে) শুধুমাত্র পুরুষদের ডেটা বাছাই করতে পারো
+    // { $match: { gender: "Male" } },
+
+    // স্টেজ-২: প্রতিটি ডকুমেন্টে দুটি নতুন ফিল্ড course ও eduTech যুক্ত করা হচ্ছে
+    { $addFields: { course: "level-2", eduTech: "Programing Hero" } },
+
+    // স্টেজ-৩: (ঐচ্ছিকভাবে) নির্দিষ্ট ফিল্ড রিটার্ন করতে চাইলে ব্যবহার করতে পারো
+    // { $project: { course: 1, eduTech: 1 } },
+
+    // স্টেজ-৪: প্রক্রিয়াজাত ডেটাগুলো আবার একই collection "test" এ merge করা হচ্ছে
+    { $merge: "test" }
+])
