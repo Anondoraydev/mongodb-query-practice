@@ -35,7 +35,6 @@ db.test.aggregate([
     { $out: "course-student" }
 ])
 
-// ✅ $merge সহ MongoDB Aggregation Pipeline(বাংলা কমেন্টসহ)
 db.test.aggregate([
     // স্টেজ-১: (ঐচ্ছিকভাবে) শুধুমাত্র পুরুষদের ডেটা বাছাই করতে পারো
     // { $match: { gender: "Male" } },
@@ -49,3 +48,29 @@ db.test.aggregate([
     // স্টেজ-৪: প্রক্রিয়াজাত ডেটাগুলো আবার একই collection "test" এ merge করা হচ্ছে
     { $merge: "test" }
 ])
+
+db.test.aggregate([
+    // stage-1: মোট, সর্বোচ্চ, সর্বনিম্ন ও গড় salary বের করা
+    {
+        $group: {
+            _id: null,
+            totalSalary: { $sum: "$salary" },
+            maxSalary: { $max: "$salary" },
+            minSalary: { $min: "$salary" },
+            avgSalary: { $avg: "$salary" },
+        }
+    },
+    // stage-2: প্রয়োজনীয় ফিল্ড retain ও নতুন ফিল্ড হিসেব করা
+    {
+        $project: {
+            totalSalary: 1,
+            maxSalary: 1,
+            minSalary: 1,
+            averageSalary: "$avgSalary",
+            rangeBetweenMaxandMin: {
+                $subtract: ["$maxSalary", "$minSalary"]
+            }
+        }
+    }
+])
+
