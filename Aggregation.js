@@ -74,3 +74,31 @@ db.test.aggregate([
     }
 ])
 
+db.test.aggregate([
+    // stage-1: friends অ্যারে ভেঙে প্রতিটি friend আলাদা করা
+    { $unwind: "$friends" },
+
+    // stage-2: friend অনুযায়ী গ্রুপ করে count বের করা
+    {
+        $group: {
+            _id: "$friends",
+            count: { $sum: 1 }
+        }
+    }
+])
+
+
+db.test.aggregate([
+    // stage-1: interests অ্যারে ভেঙে প্রতিটি interest আলাদা করা
+    {
+        $unwind: "$interests"
+    },
+    // stage-2: age অনুযায়ী গ্রুপ করে interests গুলো অ্যারেতে রাখা
+    {
+        $group: {
+            _id: "$age",
+            interestsPerAge: { $push: "$interests" }
+        }
+    }
+])
+
